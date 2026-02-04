@@ -10,7 +10,7 @@
 #include <poll.h>
 
 #define PORT "8080"   // Port we're listening on
-#define BUF_SIZE 50
+#define BUF_SIZE 1024
 
 //int message_count = 0;    //global counter
 
