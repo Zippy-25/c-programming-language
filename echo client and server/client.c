@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     int rv;
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_INET;
+    hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
 
     if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
 
     while(1)
     {
-    	    char buffer[BUF_SIZE - 16];
+    	    char buffer[BUF_SIZE - 35];
     	    char sendbuf[BUF_SIZE];
-            printf("Input - type exit to close connection: ");
+            printf("\nInput - type exit to close connection: ");
             fflush(stdout);
             
             if(fgets(buffer, sizeof buffer, stdin) == NULL)	break;
@@ -66,14 +66,15 @@ int main(int argc, char *argv[])
 	    char *timestamp = ctime(&now);
 	    
 	    sprintf(sendbuf, "%sTimestamp: %s", buffer, timestamp);
-
+	    
+	    printf("message sent by the client: %s\n", sendbuf);
 	    send(sockfd, sendbuf, strlen(sendbuf), 0);
 
 	    
-	    int numbytes = recv(sockfd, buffer, BUF_SIZE - 1, 0);
-	    buffer[numbytes] = '\0';
+	    int numbytes = recv(sockfd, sendbuf, BUF_SIZE - 1, 0);
+	    sendbuf[numbytes] = '\0';
 
-	    printf("Server reply:%s\n", buffer);
+	    printf("Server reply:%s\n", sendbuf);
 
     }
     printf("Connection closed\n");
